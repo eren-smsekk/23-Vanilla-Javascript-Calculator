@@ -10,42 +10,37 @@
   <body class="bg-dark d-flex flex-column justify-content-center text-center align-items-center vh-100">
 
     <h2 class="text-light mb-1">Vanilla Javascript Calculator</h2>
+    
     <div class="container d-flex justify-content-center align-items-center text-center">
         <div class="calculator card">
-            <input type="text" class="calculator-screen input-group" value="" disabled />
+            <input type="text" class="calculator-screen input-group" value="" disabled>
 
             <div class="calculator-keys">
+                <button type="button" class="operator btn btn-warning" value="+">+</button>
+                <button type="button" class="operator btn btn-warning" value="-">-</button>
+                <button type="button" class="operator btn btn-warning" value="*">&times;</button>
+                <button type="button" class="operator btn btn-warning" value="/">&divide;</button>
 
-                <button type="button" class="operator btn btn-info" value="+">+</button>
-                <button type="button" class="operator btn btn-info" value="-">-</button>
-                <button type="button" class="operator btn btn-info" value="*">&times;</button>
-                <button type="button" class="operator btn btn-info" value="/">&divide;</button>
+                <button type="button" class="number btn btn-light" value="7">7</button>
+                <button type="button" class="number btn btn-light" value="8">8</button>
+                <button type="button" class="number btn btn-light" value="9">9</button>
 
-                <button type="button" value="7" class="btn btn-light waves-effect">7</button>
-                <button type="button" value="8" class="btn btn-light waves-effect">8</button>
-                <button type="button" value="9" class="btn btn-light waves-effect">9</button>
+                <button type="button" class="number btn btn-light" value="4">4</button>
+                <button type="button" class="number btn btn-light" value="5">5</button>
+                <button type="button" class="number btn btn-light" value="6">6</button>
 
-                <button type="button" value="4" class="btn btn-light waves-effect">4</button>
-                <button type="button" value="5" class="btn btn-light waves-effect">5</button>
-                <button type="button" value="6" class="btn btn-light waves-effect">6</button>
+                <button type="button" class="number btn btn-light" value="1">1</button>
+                <button type="button" class="number btn btn-light" value="2">2</button>
+                <button type="button" class="number btn btn-light" value="3">3</button>
 
-                <button type="button" value="1" class="btn btn-light waves-effect">1</button>
-                <button type="button" value="2" class="btn btn-light waves-effect">2</button>
-                <button type="button" value="3" class="btn btn-light waves-effect">3</button>
+                <button type="button" class="number btn btn-light" value="0">0</button>
+                <button type="button" class="decimal btn btn-light" value=".">.</button>
+                <button type="button" class="btn btn-danger all-clear" value="C">C</button>
 
-                <button type="button" value="0" class="btn btn-light waves-effect">0</button>
-                <button type="button" value="." class="btn btn-light waves-effect">.</button>
-                <button type="button" value="C" class="btn btn-danger waves-effect all-clear">C</button>
-
-                <button type="button" class="equal-sign operator btn btn-success" value="=">=</button>
-
+                <button type="button" class="operator equal-sign btn btn-primary" value="=">=</button>
             </div>
-
-
-
         </div>
     </div>
-
 
 
 

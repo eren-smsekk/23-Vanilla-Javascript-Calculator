@@ -1,7 +1,7 @@
 .calculator {
     border: 1px solid #ccc;
-    border-radius: 5px;
     width: 400px;
+    border-radius: 5px;
 }
 
 .calculator-screen {
@@ -10,7 +10,7 @@
     border: none;
     background-color: #252525;
     color: #fff;
-    text-align: right;
+    text-align: end;
     padding-left: 10px;
     padding-right: 20px;
     font-size: 4rem;
@@ -21,9 +21,13 @@ button {
     font-size: 2rem !important;
 }
 
-.equal-sign {
-    height: 98%;
-    grid-area: 2 / 4 / 6 / 5;
+button:focus {
+    font-weight: 700;
+    border-color: #252525;
+}
+
+button:hover {
+    transform: scale(1.1);
 }
 
 .calculator-keys {
@@ -31,4 +35,13 @@ button {
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 20px;
     padding: 20px;
+}
+
+.equal-sign {
+    height: 100%;
+    grid-area: 2 / 4 / 6 / 5;
+}
+
+.equal-sign {
+    height: 98%;
 }

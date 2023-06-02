@@ -1,113 +1,92 @@
-const calculator = {
-  displayValue: '0',
-  firstOperand: null,
-  waitingForSecondOperand: false,
-  operator: null,
-};
+const display = document.querySelector(".calculator-screen");
+const keys = document.querySelector(".calculator-keys");
 
-function inputDigit(digit) {
-  const { displayValue, waitingForSecondOperand } = calculator;
+let displayValue = "0"; // Hesap makinesinin ekrandaki değeri
+let firstValue = null; // İlk değer
+let operator = null; // İşlem operatörü
+let waitingForSecondValue = false; // İkinci değerin beklenip beklenmediği
 
-  if (waitingForSecondOperand === true) {
-    // Eğer ikinci işlem bekleniyorsa, gelen rakamı direkt olarak ekrana yazarız
-    calculator.displayValue = digit;
-    calculator.waitingForSecondOperand = false;
-  } else {
-    // İkinci işlem beklenmiyorsa, rakamı mevcut ekrana ekleriz
-    calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
-  }
+updateDisplay();
+
+function updateDisplay() {
+    display.value = displayValue; // Ekrana displayValue değerini yazar
 }
 
-function inputDecimal(dot) {
-  // Eğer ekranda nokta yoksa, noktayı ekleriz
-  if (!calculator.displayValue.includes(dot)) {
-    calculator.displayValue += dot;
-  }
+keys.addEventListener('click', function(e) {
+    const element = e.target;
+    if(!element.matches('button')) return;
+
+    if(element.classList.contains('operator')) {
+        handleOperator(element.value); // İşlem operatörünü işler
+        updateDisplay();
+        return;
+    }
+    
+    if(element.classList.contains('all-clear')) {
+        clear(); // Tüm değerleri temizler
+        updateDisplay();
+        return;
+    }
+
+    if(element.classList.contains('decimal')) {
+        inputDecimal(element.value); // Ondalık noktayı işler
+        updateDisplay();
+        return;
+    }
+
+    inputNumber(element.value); // Rakamı işler
+})
+
+function inputDecimal() {
+    if(!displayValue.includes('.')) {
+        displayValue += '.';
+    }
+}
+
+function clear() {
+    displayValue = '0'; // displayValue değerini sıfırlar
 }
 
 function handleOperator(nextOperator) {
-  const { firstOperand, displayValue, operator } = calculator;
-  const inputValue = parseFloat(displayValue);
+    const value = parseFloat(displayValue);
 
-  if (operator && calculator.waitingForSecondOperand) {
-    // Eğer zaten bir operatör seçilmişse ve ikinci işlem bekleniyorsa, sadece operatörü güncelleriz
-    calculator.operator = nextOperator;
-    return;
-  }
-
-  if (firstOperand == null) {
-    // İlk operand henüz belirlenmemişse, gelen değeri ilk operanda olarak atarız
-    calculator.firstOperand = inputValue;
-  } else if (operator) {
-    // İlk operand ve bir operatör varsa, hesaplama işlemini gerçekleştiririz
-    const currentValue = firstOperand || 0;
-    const result = performCalculation[operator](currentValue, inputValue);
-
-    if (result === Infinity || result === -Infinity) {
-      // Eğer sonuç Infinity veya -Infinity ise, ekrana "Tanımsız" mesajını yazdırırız
-      calculator.displayValue = 'Tanımsız';
-    } else {
-      // Sonuç normal bir değer ise, ekrana yazdırırız ve ilk operanda olarak güncelleriz
-      calculator.displayValue = String(result);
-      calculator.firstOperand = result;
+    if(operator && waitingForSecondValue) {
+        operator = nextOperator; // İkinci değeri bekliyorsak sadece operatörü günceller
+        return;
     }
-  }
 
-  calculator.waitingForSecondOperand = true;
-  calculator.operator = nextOperator;
+    if(firstValue === 'null') {
+        firstValue = value; // İlk değeri atar
+    } else if(operator) {
+        const result = calculate(firstValue, value, operator); // İşlemi gerçekleştirir
+        displayValue = `${parseFloat(result.toFixed(7))}`; // Sonucu ekrana yazar
+        firstValue = result; // İlk değeri günceller
+    }
+
+    waitingForSecondValue = true; // İkinci değeri beklemeye başlar
+    operator = nextOperator; // Operatörü günceller
 }
 
-const performCalculation = {
-  '/': (firstOperand, secondOperand) => firstOperand / secondOperand,
-  '*': (firstOperand, secondOperand) => firstOperand * secondOperand,
-  '+': (firstOperand, secondOperand) => firstOperand + secondOperand,
-  '-': (firstOperand, secondOperand) => firstOperand - secondOperand,
-  '=': (firstOperand, secondOperand) => secondOperand,
-};
+function calculate(first, second, operator) {
+    if(operator === '+') {
+        return first + second; // Toplama işlemi
+    } else if(operator === '-') {
+        return first - second; // Çıkarma işlemi
+    } else if(operator === '*') {
+        return first * second; // Çarpma işlemi
+    } else if(operator === '/') {
+        return first / second; // Bölme işlemi
+    }
 
-function resetCalculator() {
-  // Hesaplayıcıyı sıfırlar ve ekrana 0 yazar
-  calculator.displayValue = '0';
-  calculator.firstOperand = null;
-  calculator.waitingForSecondOperand = false;
-  calculator.operator = null;
+    return second; // Eğer operatör yoksa ikinci değeri döndürür
 }
 
-function updateDisplay() {
-  // Ekrana hesaplayıcının görüntü değerini yazar
-  const display = document.querySelector('.calculator-screen');
-  display.value = calculator.displayValue;
+function inputNumber(num) {
+    if(waitingForSecondValue) {
+        displayValue = num; // İkinci değeri bekliyorsak direkt olarak rakamı ekrana yazar
+        waitingForSecondValue = false;
+    } else {
+        displayValue = displayValue === '0' ? num : displayValue + num; // İkinci değeri beklemiyorsak rakamı mevcut değere ekler
+    }
+    updateDisplay();
 }
-
-const keys = document.querySelector('.calculator-keys');
-keys.addEventListener('click', (event) => {
-  const { target } = event;
-  if (!target.matches('button')) {
-    return;
-  }
-
-  if (target.classList.contains('operator')) {
-    // Operatör tuşuna basıldığında, ilgili operatörü işler ve ekrana yazdırırız
-    handleOperator(target.value);
-    updateDisplay();
-    return;
-  }
-
-  if (target.classList.contains('decimal')) {
-    // Ondalık nokta tuşuna basıldığında, noktayı işler ve ekrana yazdırırız
-    inputDecimal(target.value);
-    updateDisplay();
-    return;
-  }
-
-  if (target.classList.contains('all-clear')) {
-    // Tamamını temizle tuşuna basıldığında, hesaplayıcıyı sıfırlar ve ekrana yazdırırız
-    resetCalculator();
-    updateDisplay();
-    return;
-  }
-
-  // Rakam tuşlarına basıldığında, ilgili rakamı işler ve ekrana yazdırırız
-  inputDigit(target.value);
-  updateDisplay();
-});
